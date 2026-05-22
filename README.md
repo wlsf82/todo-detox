@@ -118,17 +118,21 @@ npx detox test --configuration ios.sim.release
 
 All interactive elements carry `testID` props for Detox selectors:
 
-| testID             | Element                         |
-| ------------------ | ------------------------------- |
-| `new-todo-input`   | Text input to add a TODO        |
-| `add-todo-button`  | Add button                      |
-| `todo-list`        | The scrollable list             |
-| `todo-item-{id}`   | Individual list item            |
-| `todo-text-{id}`   | TODO label text                 |
-| `toggle-todo-{id}` | Checkbox to complete/uncomplete |
-| `edit-todo-{id}`   | Edit button                     |
-| `delete-todo-{id}` | Delete button                   |
-| `edit-modal`       | Edit modal container            |
-| `edit-todo-input`  | Text input inside edit modal    |
-| `save-edit-button` | Save button inside edit modal   |
-| `todo-count`       | Remaining/total counter         |
+| testID                  | Element                              |
+| ----------------------- | ------------------------------------ |
+| `new-todo-input`        | Text input to add a TODO             |
+| `add-todo-button`       | Add button                           |
+| `todo-list`             | The scrollable list                  |
+| `todo-item-{id}`        | Individual list item                 |
+| `todo-text-{id}`        | TODO label text                      |
+| `toggle-todo-{id}`      | Checkbox to complete/uncomplete      |
+| `edit-todo-{id}`        | Edit button                          |
+| `delete-todo-{id}`      | Delete button                        |
+| `edit-modal`            | Edit modal container                 |
+| `edit-todo-input`       | Text input inside edit modal         |
+| `cancel-edit-button`    | Cancel button inside edit modal      |
+| `save-edit-button`      | Save button inside edit modal        |
+| `delete-confirm-modal`  | Delete confirmation modal container  |
+| `cancel-delete-button`  | Cancel button inside delete modal    |
+| `confirm-delete-button` | Confirm button inside delete modal   |
+| `todo-count`            | Remaining/total counter              |
