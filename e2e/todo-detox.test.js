@@ -49,7 +49,6 @@ describe('TODO App', () => {
       await element(by.id('edit-todo-1')).tap();
       await waitFor(element(by.id('edit-todo-input')))
         .toBeVisible()
-        .withTimeout(2000);
       await element(by.id('edit-todo-input')).clearText();
       await element(by.id('edit-todo-input')).typeText('Updated text');
       await element(by.id('save-edit-button')).tap();
@@ -65,7 +64,6 @@ describe('TODO App', () => {
       await element(by.id('edit-todo-1')).tap();
       await waitFor(element(by.id('edit-modal')))
         .toBeVisible()
-        .withTimeout(2000);
 
       await element(by.id('cancel-edit-button')).tap();
       await expect(element(by.id('edit-modal'))).not.toBeVisible();
@@ -79,7 +77,6 @@ describe('TODO App', () => {
 
       await waitFor(element(by.id('todo-count')))
         .toHaveText('0 of 1 remaining')
-        .withTimeout(2000);
     });
 
     it('updates the counter when a TODO is completed', async () => {
@@ -92,7 +89,6 @@ describe('TODO App', () => {
 
       await waitFor(element(by.id('todo-count')))
         .toHaveText('1 of 2 remaining')
-        .withTimeout(2000);
     });
 
     it('unmarks a completed TODO', async () => {
@@ -102,12 +98,10 @@ describe('TODO App', () => {
       await element(by.id('toggle-todo-1')).tap();
       await waitFor(element(by.id('todo-count')))
         .toHaveText('0 of 1 remaining')
-        .withTimeout(2000);
 
       await element(by.id('toggle-todo-1')).tap();
       await waitFor(element(by.id('todo-count')))
         .toHaveText('1 of 1 remaining')
-        .withTimeout(2000);
     });
   });
 
@@ -119,7 +113,6 @@ describe('TODO App', () => {
       await element(by.id('delete-todo-1')).tap();
       await waitFor(element(by.id('delete-confirm-modal')))
         .toBeVisible()
-        .withTimeout(2000);
       await element(by.id('confirm-delete-button')).tap();
 
       await expect(element(by.text('Delete me'))).not.toExist();
@@ -133,7 +126,6 @@ describe('TODO App', () => {
       await element(by.id('delete-todo-1')).tap();
       await waitFor(element(by.id('delete-confirm-modal')))
         .toBeVisible()
-        .withTimeout(2000);
       await element(by.id('cancel-delete-button')).tap();
 
       await expect(element(by.text('Keep me'))).toBeVisible();
