@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
+  Animated,
   KeyboardAvoidingView,
   Modal,
+  PanResponder,
   Platform,
   Pressable,
   SafeAreaView,
@@ -20,6 +22,85 @@ interface Todo {
 }
 
 let _nextId = 0;
+
+const DELETE_BUTTON_WIDTH = 80;
+
+interface SwipeableRowProps {
+  testID?: string;
+  deleteTestID?: string;
+  onDeletePress: () => void;
+  children: React.ReactNode;
+}
+
+function SwipeableRow({
+  testID,
+  deleteTestID,
+  onDeletePress,
+  children,
+}: SwipeableRowProps) {
+  const translateX = useRef(new Animated.Value(0)).current;
+  const currentOffset = useRef(0);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (_, { dx, dy }) =>
+        Math.abs(dx) > Math.abs(dy) * 2 && Math.abs(dx) > 8,
+      onPanResponderGrant: () => {
+        translateX.setOffset(currentOffset.current);
+        translateX.setValue(0);
+      },
+      onPanResponderMove: (_, { dx }) => {
+        const total = Math.max(
+          -DELETE_BUTTON_WIDTH,
+          Math.min(0, currentOffset.current + dx),
+        );
+        translateX.setValue(total - currentOffset.current);
+      },
+      onPanResponderRelease: (_, { dx }) => {
+        const total = Math.max(
+          -DELETE_BUTTON_WIDTH,
+          Math.min(0, currentOffset.current + dx),
+        );
+        translateX.flattenOffset();
+        const toValue =
+          total < -DELETE_BUTTON_WIDTH / 2 ? -DELETE_BUTTON_WIDTH : 0;
+        currentOffset.current = toValue;
+        Animated.spring(translateX, {
+          toValue,
+          useNativeDriver: false,
+        }).start();
+      },
+    }),
+  ).current;
+
+  const handleDeletePress = () => {
+    currentOffset.current = 0;
+    Animated.spring(translateX, { toValue: 0, useNativeDriver: false }).start();
+    onDeletePress();
+  };
+
+  return (
+    <View style={styles.swipeContainer}>
+      <View style={styles.swipeDeleteBackground}>
+        <Pressable
+          testID={deleteTestID}
+          style={styles.swipeDeleteButton}
+          onPress={handleDeletePress}
+        >
+          <Text style={styles.swipeDeleteText}>Delete</Text>
+        </Pressable>
+      </View>
+      <Animated.View
+        testID={testID}
+        {...panResponder.panHandlers}
+        style={[styles.todoItem, {transform: [{translateX}]}]}
+      >
+        {children}
+      </Animated.View>
+    </View>
+  );
+}
 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -122,10 +203,11 @@ export default function App() {
           contentContainerStyle={styles.listContent}
         >
           {todos.map(item => (
-            <View
-              testID={`todo-item-${item.id}`}
+            <SwipeableRow
               key={item.id}
-              style={styles.todoItem}
+              testID={`todo-item-${item.id}`}
+              deleteTestID={`swipe-delete-${item.id}`}
+              onDeletePress={() => setConfirmingDeleteId(item.id)}
             >
               <Pressable
                 testID={`toggle-todo-${item.id}`}
@@ -159,7 +241,7 @@ export default function App() {
                   <Text style={styles.deleteButtonText}>Delete</Text>
                 </Pressable>
               </View>
-            </View>
+            </SwipeableRow>
           ))}
         </ScrollView>
       )}
@@ -454,5 +536,30 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#fff',
     fontWeight: '600',
+  },
+  swipeContainer: {
+    borderRadius: 12,
+  },
+  swipeDeleteBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  swipeDeleteButton: {
+    width: DELETE_BUTTON_WIDTH,
+    backgroundColor: '#ef4444',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  swipeDeleteText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 14,
   },
 });
