@@ -115,35 +115,12 @@ describe('TODO App', () => {
     });
 
     it('cancels swipe deletion when tapping Cancel on the confirmation', async () => {
-      await element(by.id('new-todo-input')).typeText('Keep me too');
+      await element(by.id('new-todo-input')).typeText('Keep me');
       await element(by.id('add-todo-button')).tap();
 
       await element(by.id('todo-item-1')).swipe('left', 'fast', 0.5);
       await element(by.id('swipe-delete-1')).tap();
 
-      await waitFor(element(by.id('delete-confirm-modal'))).toBeVisible();
-      await element(by.id('cancel-delete-button')).tap();
-
-      await expect(element(by.text('Keep me too'))).toBeVisible();
-    });
-
-    it('deletes a TODO and shows the empty state', async () => {
-      await element(by.id('new-todo-input')).typeText('Delete me');
-      await element(by.id('add-todo-button')).tap();
-
-      await (element(by.id('delete-todo-1'))).tap();
-      await waitFor(element(by.id('delete-confirm-modal'))).toBeVisible();
-      await element(by.id('confirm-delete-button')).tap();
-
-      await expect(element(by.text('Delete me'))).not.toExist();
-      await expect(element(by.text('No TODOs yet.'))).toBeVisible();
-    });
-
-    it('cancels deletion when tapping Cancel on the confirmation', async () => {
-      await element(by.id('new-todo-input')).typeText('Keep me');
-      await element(by.id('add-todo-button')).tap();
-
-      await (element(by.id('delete-todo-1'))).tap();
       await waitFor(element(by.id('delete-confirm-modal'))).toBeVisible();
       await element(by.id('cancel-delete-button')).tap();
 

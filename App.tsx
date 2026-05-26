@@ -41,11 +41,14 @@ function SwipeableRow({
   const translateX = useRef(new Animated.Value(0)).current;
   const currentOffset = useRef(0);
 
+  const isHorizontalSwipe = (_: unknown, {dx, dy}: {dx: number; dy: number}) =>
+    Math.abs(dx) > Math.abs(dy) * 2 && Math.abs(dx) > 8;
+
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false,
-      onMoveShouldSetPanResponder: (_, { dx, dy }) =>
-        Math.abs(dx) > Math.abs(dy) * 2 && Math.abs(dx) > 8,
+      onMoveShouldSetPanResponder: isHorizontalSwipe,
+      onMoveShouldSetPanResponderCapture: isHorizontalSwipe,
       onPanResponderGrant: () => {
         translateX.setOffset(currentOffset.current);
         translateX.setValue(0);
@@ -218,13 +221,15 @@ export default function App() {
                   {item.completed ? '✓' : '○'}
                 </Text>
               </Pressable>
-              <Text
-                testID={`todo-text-${item.id}`}
-                style={[styles.todoText, item.completed && styles.todoTextDone]}
-                numberOfLines={2}
-              >
-                {item.text}
-              </Text>
+              <View style={styles.todoTextArea} onStartShouldSetResponder={() => true}>
+                <Text
+                  testID={`todo-text-${item.id}`}
+                  style={[styles.todoText, item.completed && styles.todoTextDone]}
+                  numberOfLines={2}
+                >
+                  {item.text}
+                </Text>
+              </View>
               <View style={styles.actions}>
                 <Pressable
                   testID={`edit-todo-${item.id}`}
@@ -233,16 +238,10 @@ export default function App() {
                 >
                   <Text style={styles.editButtonText}>Edit</Text>
                 </Pressable>
-                <Pressable
-                  testID={`delete-todo-${item.id}`}
-                  style={styles.deleteButton}
-                  onPress={() => setConfirmingDeleteId(item.id)}
-                >
-                  <Text style={styles.deleteButtonText}>Delete</Text>
-                </Pressable>
               </View>
             </SwipeableRow>
           ))}
+          <Text style={styles.swipeHint}>Swipe left on a TODO to delete it</Text>
         </ScrollView>
       )}
 
@@ -409,8 +408,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#4f46e5',
   },
-  todoText: {
+  todoTextArea: {
     flex: 1,
+  },
+  todoText: {
     fontSize: 16,
     color: '#1a1a1a',
   },
@@ -431,17 +432,6 @@ const styles = StyleSheet.create({
   editButtonText: {
     fontSize: 13,
     color: '#4f46e5',
-    fontWeight: '500',
-  },
-  deleteButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    backgroundColor: '#fee2e2',
-    borderRadius: 6,
-  },
-  deleteButtonText: {
-    fontSize: 13,
-    color: '#ef4444',
     fontWeight: '500',
   },
   emptyState: {
@@ -536,6 +526,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#fff',
     fontWeight: '600',
+  },
+  swipeHint: {
+    fontSize: 12,
+    color: '#aaa',
+    textAlign: 'center',
+    marginTop: 8,
   },
   swipeContainer: {
     borderRadius: 12,
