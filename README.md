@@ -7,7 +7,7 @@ A React Native TODO app built for iPhone, designed to be tested with [Detox](htt
 - **Add** a new TODO by typing in the input field and tapping **Add** (or pressing Return)
 - **Complete** a TODO by tapping the circle checkbox — it gets a strikethrough when done
 - **Edit** any TODO via the **Edit** button, which opens a modal to update the text
-- **Delete** any TODO via the **Delete** button, with a confirmation prompt
+- **Delete** any TODO by swiping left to reveal the **Delete** button, then confirming the prompt
 - **Progress counter** showing how many items remain out of the total
 
 ## Requirements
@@ -127,7 +127,7 @@ All interactive elements carry `testID` props for Detox selectors:
 | `todo-text-{id}`        | TODO label text                      |
 | `toggle-todo-{id}`      | Checkbox to complete/uncomplete      |
 | `edit-todo-{id}`        | Edit button                          |
-| `delete-todo-{id}`      | Delete button                        |
+| `swipe-delete-{id}`     | Delete button revealed on swipe left |
 | `edit-modal`            | Edit modal container                 |
 | `edit-todo-input`       | Text input inside edit modal         |
 | `cancel-edit-button`    | Cancel button inside edit modal      |
