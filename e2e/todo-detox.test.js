@@ -100,6 +100,17 @@ describe('TODO App', () => {
   });
 
   describe('Delete', () => {
+    it('reveals the delete button on swipe left and hides it on swipe right', async () => {
+      await element(by.id('new-todo-input')).typeText('Swipeable task');
+      await element(by.id('add-todo-button')).tap();
+
+      await element(by.id('todo-item-1')).swipe('left', 'fast', 0.5);
+      await expect(element(by.id('swipe-delete-1'))).toBeVisible();
+
+      await element(by.id('todo-item-1')).swipe('right', 'fast', 0.5);
+      await expect(element(by.id('swipe-delete-1'))).not.toBeVisible();
+    });
+
     it('deletes a TODO by swiping left and tapping the delete button', async () => {
       await element(by.id('new-todo-input')).typeText('Swipe to delete me');
       await element(by.id('add-todo-button')).tap();
