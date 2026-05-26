@@ -104,10 +104,10 @@ describe('TODO App', () => {
       await element(by.id('new-todo-input')).typeText('Swipeable task');
       await element(by.id('add-todo-button')).tap();
 
-      await element(by.id('todo-item-1')).swipe('left', 'fast', 0.5);
+      await element(by.id('todo-item-1')).swipe('left');
       await expect(element(by.id('swipe-delete-1'))).toBeVisible();
 
-      await element(by.id('todo-item-1')).swipe('right', 'fast', 0.5);
+      await element(by.id('todo-item-1')).swipe('right');
       await expect(element(by.id('swipe-delete-1'))).not.toBeVisible();
     });
 
@@ -115,7 +115,7 @@ describe('TODO App', () => {
       await element(by.id('new-todo-input')).typeText('Swipe to delete me');
       await element(by.id('add-todo-button')).tap();
 
-      await element(by.id('todo-item-1')).swipe('left', 'fast', 0.5);
+      await element(by.id('todo-item-1')).swipe('left');
       await element(by.id('swipe-delete-1')).tap();
 
       await waitFor(element(by.id('delete-confirm-modal'))).toBeVisible();
@@ -129,7 +129,7 @@ describe('TODO App', () => {
       await element(by.id('new-todo-input')).typeText('Keep me');
       await element(by.id('add-todo-button')).tap();
 
-      await element(by.id('todo-item-1')).swipe('left', 'fast', 0.5);
+      await element(by.id('todo-item-1')).swipe('left');
       await element(by.id('swipe-delete-1')).tap();
 
       await waitFor(element(by.id('delete-confirm-modal'))).toBeVisible();
